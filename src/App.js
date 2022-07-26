@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import "./App.css";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import LoginContainer from "./Containers/LoginContainer";
+import ListContainer from "./Containers/ListContainer";
+import { useSelector } from "react-redux";
 
 function App() {
+  const navigate = useNavigate();
+
+  const { data } = useSelector((state) => state.loginReducer);
+
+  useEffect(() => {
+    if (data?.payload?.code === 200) {
+      navigate("/list");
+    } else {
+      navigate("/login");
+    }
+  }, [data]);
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bd-main">
+      <Routes>
+        <Route path="/login" element={<LoginContainer />} />
+        <Route path="/list" element={<ListContainer />} />
+      </Routes>
     </div>
   );
 }
